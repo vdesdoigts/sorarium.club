@@ -1,0 +1,25 @@
+query CurrentUserNBACards($first: Int!, $after: String) {
+  currentSportsUser {
+    nbaCards(first: $first, after: $after) {
+      nodes {
+        id
+        slug
+        fullImageUrl
+        rarity
+        serialNumber
+        season
+        player {
+          slug
+        }
+        team {
+          name
+          fullName
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

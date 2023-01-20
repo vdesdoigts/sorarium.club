@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "filteredRelationCount"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NbaTeam {
+  id            String   @id @default(uuid())
+  nbaId         String   @unique
+  name          String
+  tricode       String
+  players       NbaPlayerTeam[]
+}
+
+model NbaPlayerTeam {
+  id              String      @id @default(uuid())
+  team            NbaTeam     @relation(fields: [teamId], references: [id])
+  teamId          String
+  date            DateTime
+  player          NbaPlayer   @relation(fields: [playerId], references: [id])
+  playerId        String
+  jerseyNumber    Int         @default(0)
+}
+
+model NbaPlayer {
+  id              String          @id @default(uuid())
+  nbaId           String          @unique
+  sorareSlug      String          @unique
+  fullName        String          @default("")
+  sorareNbaCards  NbaSorareCard[]
+  teams           NbaPlayerTeam[]
+}
+
+model User {
+  id                 String          @id @default(uuid())
+  sorareId           String          @unique
+  sorareUsername     String
+  sorareToken        String
+  sorareRefreshToken String
+  sorareNbaCards     NbaSorareCard[]
+  nbaGallery         NbaGallery?
+  nbaWishlist        NbaWishlist?
+  NbaCollection      NbaCollection[]
+}
+
+model NbaSorareCard {
+  id                    String        @id @default(uuid())
+  sorareId              String        @unique
+  player                NbaPlayer     @relation(fields: [playerId], references: [id])
+  playerId              String
+  rarity                String
+  serialNumber          Int
+  specialSerialNumber   Boolean       @default(false)
+  slug                  String
+  imageUrl              String
+  season                String
+  users                 User[]
+  galleryCards          NbaGalleryCard[]
+  wishlistCards         NbaWishlistCard[]
+  collectionCard        NbaCollectionCard[]
+}
+
+model NbaGallery {
+  id     String        @id @default(uuid())
+  cards  NbaGalleryCard[]
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String        @unique
+}
+
+model NbaGalleryCard {
+  id        String        @id @default(uuid())
+  gallery   NbaGallery    @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  galleryId String
+  card      NbaSorareCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId    String
+  position  Int
+}
+
+model NbaWishlist {
+  id        String        @id @default(uuid())
+  cards     NbaWishlistCard[]
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String        @unique
+}
+
+model NbaWishlistCard {
+  id          String        @id @default(uuid())
+  wishlist    NbaWishlist   @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  wishlistId  String
+  card        NbaSorareCard @relation(fields: [cardId], references: [id])
+  cardId      String
+  position    Int
+}
+
+model NbaCollection {
+  id          String        @id @default(uuid())
+  cards       NbaCollectionCard[]
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  position    Int
+  title       String        @default("")
+  description String        @default("")
+}
+
+model NbaCollectionCard {
+  id            String          @id @default(uuid())
+  collection    NbaCollection   @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId  String
+  card          NbaSorareCard   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId        String
+  position      Int
+}

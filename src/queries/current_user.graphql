@@ -1,0 +1,6 @@
+query CurrentUserQuery {
+  currentSportsUser {
+    id
+    nickname
+  }
+}

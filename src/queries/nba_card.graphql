@@ -1,0 +1,17 @@
+query NBACard($slug: String!) {
+  nbaCard(slug: $slug) {
+    id
+    slug
+    fullImageUrl
+    avatarImageUrl
+    season
+    serialNumber
+    rarity
+    player {
+      id
+      slug
+      displayName
+      shirtNumber
+    }
+  }
+}
