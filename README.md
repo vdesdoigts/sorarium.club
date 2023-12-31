@@ -1,6 +1,8 @@
 # Sorarium
 
-introducing my new side project: https://sorarium.club
+**Edit: The project is no longer online. Since 2023, Sorare has offered all of the features developed in Sorarium. Then, I no longer saw the point in keeping it up to date.**
+
+Introducing my new side project: https://sorarium.club
 
 - Showcase your collectibles with Sorarium 💎  
 - Build and share your own collections 🏆  
